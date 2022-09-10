@@ -48,13 +48,24 @@ function todosGenerator(todosList){
 
         // console.log(newTodoCompleteBtn)
 
+        newTodoCompleteBtn.setAttribute('onclick', 'editTodo(' + todo.id +')')
+
 
 
         newTodoDeleteBtn = document.createElement('button')
         newTodoDeleteBtn.className = 'btn btn-danger'
         newTodoDeleteBtn.innerHTML = 'Delete'
-        
+
         // console.log(newTodoDeleteBtn)
+
+        newTodoDeleteBtn.setAttribute('onclick', 'removeTodo(' + todo.id +')')
+
+        if (todo.complete){
+            newTodoLiElem.className = 'uncompleted well'
+            newTodoCompleteBtn.innerHTML = 'uncomplete'
+        }
+        
+        
 
         newTodoLiElem.append(newTodoLabelElem, newTodoCompleteBtn, newTodoDeleteBtn)
         // console.log(newTodoLiElem)
@@ -66,7 +77,47 @@ function todosGenerator(todosList){
 
 
     })
-    
+}
+
+
+
+
+function editTodo(todoId) {
+    // console.log(todoId)
+
+    let localStorageTodos = JSON.parse(localStorage.getItem('todos'))
+     // console.log(localStorageTodos)
+
+    todosArray = localStorageTodos
+
+    todosArray.forEach(function (todo) {
+        if (todo.id === todoId) {
+            todo.complete = !todo.complete
+        }
+    })
+
+    setLocalStorage(todosArray)
+    todosGenerator(todosArray)
+}
+
+
+
+function removeTodo(todoId){
+    // console.log(todoId)
+    let localStorageTodos =JSON.parse(localStorage.getItem('todos'))
+    // console.log(localStorageTodos)
+
+    todosArray = localStorageTodos
+    let mainTodoIndex =todosArray.findIndex(function(todo){
+        return todo.id === todoId 
+    })
+    // console.log(mainTodoIndex);
+    todosArray.splice(mainTodoIndex, 1)
+    // console.log(todosArray);
+
+    setLocalStorage(todosArray)
+    todosGenerator(todosArray)
+
 
 }
 
@@ -96,7 +147,7 @@ addButton.addEventListener('click', addNewTodo)
 clearButton.addEventListener('click', clearTodos)
 
 inputElem.addEventListener('keydown', function(event){
-    console.log(event)
+    // console.log(event)
 
     if(event.code === 'Enter'){
         addNewTodo()    
